@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/Twiddit/Twiddit_auth_ms/initializers"
@@ -113,7 +114,7 @@ func Login(ctx *gin.Context) {
 	// Send it back
 	ctx.SetSameSite(http.SameSiteLaxMode)
 	ctx.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
-	utils.APIResponse(ctx, "Successful Login", http.StatusOK, http.MethodPost, map[string]string{"accessToken": tokenString})
+	utils.APIResponse(ctx, "Successful Login", http.StatusOK, http.MethodPost, map[string]string{"accessToken": tokenString, "userId": strconv.FormatUint(uint64(user.ID), 10)})
 }
 
 func Validate(ctx *gin.Context) {
