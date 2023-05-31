@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -58,6 +59,24 @@ func SignUp(ctx *gin.Context) {
 		Username:     body.Username,
 	}
 
+	// -------------- LDAP Connection -------------
+	l, connectionErr := utils.Connect()
+	if connectionErr != nil {
+		utils.APIResponse(ctx, "[LDAP] No se pudo conectar", http.StatusServiceUnavailable, http.MethodPost, nil)
+		log.Fatal(connectionErr)
+	}
+	// Defer al cierre de la conexion
+	defer l.Close()
+
+	// User creation in LDAP
+	errLdap := utils.CreateUser(l, body.Username, body.Email, body.Password)
+	if errLdap != nil {
+		utils.APIResponse(ctx, fmt.Sprintf("[LDAP] No se pudo crear usuario: %s", errLdap), http.StatusServiceUnavailable, http.MethodPost, nil)
+		return
+	}
+
+	// ---------------------------------------------
+
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
@@ -89,6 +108,22 @@ func Login(ctx *gin.Context) {
 		utils.APIResponse(ctx, "User is not registered. Please Sign Up first", http.StatusBadRequest, http.MethodPost, nil)
 		return
 	}
+
+	// ---------- LDAP Verification -----------------
+	l, connectionErr := utils.Connect()
+	if connectionErr != nil {
+		utils.APIResponse(ctx, "[LDAP] Conexion fallida", http.StatusServiceUnavailable, http.MethodPost, nil)
+		log.Fatal(connectionErr)
+	}
+	defer l.Close()
+
+	// Normal Bind and Search
+	_, bindingErr := utils.BindAndSearch(l, body.Email, body.Password)
+	if bindingErr != nil {
+		utils.APIResponse(ctx, fmt.Sprintf("[LDAP] Error autenticando usuario:%s", bindingErr), http.StatusNotFound, http.MethodPost, nil)
+	}
+
+	// ------------------------------------------------
 
 	// Compare sent in pass with saved user pass hash
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
