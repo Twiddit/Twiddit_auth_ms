@@ -15,4 +15,5 @@ type User struct {
 	ProfilePhoto string
 	Description  string
 	Username     string
+	Token        string
 }
