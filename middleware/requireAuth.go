@@ -16,7 +16,7 @@ import (
 func RequireAuth(ctx *gin.Context) {
 	// Get the cookie off the request
 	var body struct {
-		AccessToken string
+		Authorization string
 	}
 
 	if ctx.BindJSON(&body) != nil {
@@ -24,7 +24,7 @@ func RequireAuth(ctx *gin.Context) {
 		return
 	}
 
-	tokenString := body.AccessToken
+	tokenString := body.Authorization
 
 	// Decode it and validate it
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

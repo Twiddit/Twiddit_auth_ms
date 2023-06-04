@@ -19,6 +19,7 @@ func main() {
 	router.POST("/signup", controllers.SignUp)
 	router.POST("/login", controllers.Login)
 	router.POST("/validate", middleware.RequireAuth, controllers.Validate)
+	router.POST("/logout", middleware.RequireAuth, controllers.Logout)
 	router.POST("/change_password", middleware.PasswordControl, controllers.ChangePassword)
 	router.Run()
 }

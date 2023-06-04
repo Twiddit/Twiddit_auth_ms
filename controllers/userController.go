@@ -145,6 +145,9 @@ func Login(ctx *gin.Context) {
 		utils.APIResponse(ctx, "Failed to create token", http.StatusBadRequest, http.MethodPost, nil)
 		return
 	}
+	// Adding JWT token to database
+	user.Token = tokenString
+	initializers.DB.Save(&user)
 
 	// Send it back
 	ctx.SetSameSite(http.SameSiteLaxMode)
@@ -156,4 +159,18 @@ func Validate(ctx *gin.Context) {
 	// Validate the token using the middleware
 	// validAuth, _ := ctx.Get("auth")
 	utils.APIResponse(ctx, "Successful Validation", http.StatusOK, http.MethodPost, map[string]string{"accessToken": "True"})
+}
+
+func Logout(ctx *gin.Context) {
+	// Look up requested user
+	fmt.Println("Starting controller for logout")
+	userId, _ := ctx.Get("user")
+	fmt.Println(userId)
+	var user models.User
+	initializers.DB.First(&user, "id = ?", userId)
+	// Delete the token from the database
+	user.Token = ""
+	initializers.DB.Save(&user)
+	// Respond to the user
+	utils.APIResponse(ctx, "User is now logged out", http.StatusOK, http.MethodPost, nil)
 }
