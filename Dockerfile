@@ -13,6 +13,6 @@ COPY . ./
 
 RUN go build -o /twiddit_auth_ms
 
-EXPOSE 7070
+EXPOSE 1414
 
 CMD [ "/twiddit_auth_ms" ]
