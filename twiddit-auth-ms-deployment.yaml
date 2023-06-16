@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-ms
+spec:
+  selector:
+    matchLabels:
+      app: auth-ms
+  replicas: 1
+  template:
+    metadata:
+      labels: 
+        app: auth-ms
+    spec:
+      containers:
+        - name: auth-ms
+          image: joviedog/test-dh
+          ports:
+            - containerPort: 1414S
