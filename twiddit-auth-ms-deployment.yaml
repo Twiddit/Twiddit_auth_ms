@@ -16,4 +16,4 @@ spec:
         - name: auth-ms
           image: joviedog/test-dh
           ports:
-            - containerPort: 1414S
+            - containerPort: 1414
