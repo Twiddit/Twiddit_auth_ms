@@ -11,7 +11,7 @@ const (
 	AdminPassword = "admin"
 	BaseDN        = "ou=users,dc=twiddit,dc=unal,dc=edu,dc=co"
 	Filter        = "(objectClass=*)"
-	IP            = "localhost"
+	IP            = "10.208.7.190"
 )
 
 func Connect() (*ldap.Conn, error) {

@@ -14,6 +14,11 @@ spec:
     spec:
       containers:
         - name: auth-ms
-          image: joviedog/test-dh
+          env: 
+            - name: SECRET
+              value: 1414
+            - name: PORT
+              value: 394eeec66de5e0b6cc46540ce65f4e8f
+          image: gcr.io/inlaid-booth-388620/auth-ms
           ports:
             - containerPort: 1414
