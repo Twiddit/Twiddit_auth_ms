@@ -174,3 +174,8 @@ func Logout(ctx *gin.Context) {
 	// Respond to the user
 	utils.APIResponse(ctx, "User is now logged out", http.StatusOK, http.MethodPost, nil)
 }
+
+func Status(ctx *gin.Context) {
+	// Return working message
+	ctx.JSON(http.StatusOK, gin.H{"Status": "OK"})
+}
