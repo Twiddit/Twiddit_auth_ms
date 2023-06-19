@@ -33,6 +33,8 @@ func SignUp(ctx *gin.Context) {
 		return
 	}
 
+	fmt.Println(body)
+
 	// Hash the password
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
@@ -42,7 +44,7 @@ func SignUp(ctx *gin.Context) {
 	}
 
 	// Birthday parsing
-	date, err := time.Parse("14-01-2006", body.Birthday)
+	date, err := time.Parse("02-01-2006", body.Birthday)
 
 	// Check for errors
 	if err != nil {
