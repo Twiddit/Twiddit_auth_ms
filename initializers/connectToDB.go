@@ -15,10 +15,8 @@ func ConnectToDB() {
 	//dsn := "postgres://kyvjozto:u9j8e5YVyNmou7V0SQTXqh404EtqMdsq@rajje.db.elephantsql.com/kyvjozto"
 	// database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
-	database, err := gorm.Open(postgres.New(postgres.Config{
-		DriverName: "cloudsqlpostgres",
-		DSN:        "host=inlaid-booth-388620:us-east1:users-db user=auth-ms dbname=users password=NuevoPass sslmode=disable",
-	}))
+	dsn := "host=10.66.16.3 user=auth-ms dbname=users password=NuevoPass sslmode=disable"
+	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	// Catch errors
 	if err != nil {
